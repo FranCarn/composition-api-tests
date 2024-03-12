@@ -1,0 +1,93 @@
+<template>
+  <h2 v-if="isLoading">Loading...</h2>
+  <h2 v-else>Users</h2>
+  <h5 v-if="errorMsg">{{ errorMsg }}</h5>
+
+  <div v-if="users.length">
+    <ul>
+      <li v-for="{ first_name, last_name, id, email } in users" :key="id">
+        <h4>{{ first_name }} {{ last_name }}</h4>
+        <h5>{{ email }}</h5>
+      </li>
+    </ul>
+  </div>
+  <button @click="prevPage">Back</button>
+  <span>Page {{ currentPage }}</span>
+  <button @click="nextPage">Next</button>
+</template>
+
+<script>
+import { ref } from "vue";
+import axios from "axios";
+
+export default {
+  setup() {
+    const users = ref([]);
+    const isLoading = ref(true);
+    const currentPage = ref(1);
+    const errorMsg = ref("");
+
+    const getUsers = async (page = 1) => {
+      if (!page) return;
+      isLoading.value = true;
+      try {
+        const { data } = await axios.get(
+          `https://reqres.in/api/users?page=${page}`
+        );
+
+        if (data.data.length) {
+          users.value = data.data;
+          currentPage.value = data.page;
+        } else if (currentPage.value) {
+          errorMsg.value = "No more users.";
+        }
+      } catch (error) {
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
+    getUsers();
+    return {
+      currentPage,
+      errorMsg,
+      isLoading,
+      users,
+
+      nextPage: () => getUsers(currentPage.value + 1),
+      prevPage: () => getUsers(currentPage.value - 1),
+    };
+  },
+};
+</script>
+
+<style scoped>
+h2 {
+  text-align: center;
+  width: 100%;
+}
+h5 {
+  text-align: center;
+}
+div {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+ul {
+  width: 200px;
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style-type: none;
+}
+button {
+  margin: 20px;
+  border: 1px solid black;
+  background: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+</style>
