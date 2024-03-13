@@ -1,11 +1,12 @@
 import { ref } from "vue";
 import axios from "axios";
-const usePokemon = (id) => {
+const usePokemon = (searchId) => {
   const pokemon = ref(null);
   const isLoading = ref(false);
   const errorMsg = ref(null);
 
-  const searchPokemon = async () => {
+  const searchPokemon = async (id) => {
+    if (!id) return;
     isLoading.value = true;
     pokemon.value = null;
     try {
@@ -21,12 +22,14 @@ const usePokemon = (id) => {
     }
   };
 
-  searchPokemon();
+  searchPokemon(searchId);
 
   return {
     errorMsg,
     isLoading,
     pokemon,
+
+    searchPokemon,
   };
 };
 

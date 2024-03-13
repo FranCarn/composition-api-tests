@@ -1,5 +1,5 @@
 <template>
-  <h1>Pokemon #{{ id }}</h1>
+  <h1>Pokemon #{{ $router.currentRoute.value.params.id }}</h1>
 
   <h1 v-if="!pokemon && !errorMsg">Loading...</h1>
 
@@ -18,14 +18,25 @@
 </template>
 
 <script>
+import { watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import usePokemon from "@/composables/usePokemon";
 export default {
   setup() {
-    const { params } = useRoute();
-    const { id } = params;
-    const { errorMsg, isLoading, pokemon } = usePokemon(id);
-    return { errorMsg, id, isLoading, pokemon };
+    const route = useRoute();
+
+    const { errorMsg, isLoading, pokemon, searchPokemon } = usePokemon(
+      route.params.id
+    );
+    // send first param (actual value) to the func
+    // watch(() => id, searchPokemon)
+    watch(
+      () => route.params.id,
+      (value, prev) => {
+        searchPokemon(route.params.id);
+      }
+    );
+    return { errorMsg, isLoading, pokemon };
   },
 };
 </script>
@@ -33,5 +44,11 @@ export default {
 <style scoped>
 h3 {
   text-transform: capitalize;
+}
+a {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+  color: #000;
 }
 </style>
