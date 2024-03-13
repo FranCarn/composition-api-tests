@@ -19,7 +19,7 @@
 
 <script>
 import { watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { onBeforeRouteLeave, useRoute } from "vue-router";
 import usePokemon from "@/composables/usePokemon";
 export default {
   setup() {
@@ -28,6 +28,12 @@ export default {
     const { errorMsg, isLoading, pokemon, searchPokemon } = usePokemon(
       route.params.id
     );
+
+    onBeforeRouteLeave(() => {
+      // if function return false stay in screen, return true continue to redirect
+      return window.confirm("¿Sure to leave?");
+    });
+
     // send first param (actual value) to the func
     // watch(() => id, searchPokemon)
     watch(
