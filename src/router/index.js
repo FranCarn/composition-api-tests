@@ -40,6 +40,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "pokemon" */ "../views/PokemonView.vue"),
   },
+  {
+    path: "/to-do",
+    name: "to-do",
+    component: () =>
+      import(/* webpackChunkName: "to-do" */ "../views/TodoVuex.vue"),
+  },
 ];
 
 const router = createRouter({
