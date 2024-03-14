@@ -2,13 +2,25 @@
   <h1>TO-DO</h1>
   <h4>Tasks pending: {{ pending.length }}</h4>
   <hr />
-  <button>All</button>
-  <button>Pending</button>
-  <button>Completed</button>
-  <div v-if="all.length">
+  <button @click="currentTab = 'all'" :class="{ active: currentTab === 'all' }">
+    All
+  </button>
+  <button
+    @click="currentTab = 'pending'"
+    :class="{ active: currentTab === 'pending' }"
+  >
+    Pending
+  </button>
+  <button
+    @click="currentTab = 'completed'"
+    :class="{ active: currentTab === 'completed' }"
+  >
+    Completed
+  </button>
+  <div v-if="getTodosByTab.length">
     <ul>
       <li
-        v-for="{ text, id, completed } in all"
+        v-for="{ text, id, completed } in getTodosByTab"
         :key="id"
         :class="{ completed: completed }"
       >
@@ -19,17 +31,21 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 export default {
   setup() {
     const { getters, commit, dispatch } = useStore();
+    const currentTab = ref("all");
 
     return {
+      currentTab,
+
       pending: computed(() => getters["pendingTodos"]),
       completed: computed(() => getters["completedTodos"]),
       all: computed(() => getters["allTodos"]),
+      getTodosByTab: computed(() => getters["getTodosByTab"](currentTab.value)),
     };
   },
 };
@@ -40,6 +56,11 @@ div {
   display: flex;
   justify-content: center;
   text-align: "center";
+}
+button {
+  margin-inline: 10px;
+  width: 85px;
+  cursor: pointer;
 }
 ul {
   width: 300px;
