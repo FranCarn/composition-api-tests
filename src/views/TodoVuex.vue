@@ -23,6 +23,7 @@
         v-for="{ text, id, completed } in getTodosByTab"
         :key="id"
         :class="{ completed: completed }"
+        @dblclick="toggleTodo(id)"
       >
         {{ text }}
       </li>
@@ -31,21 +32,17 @@
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
-import { useStore } from "vuex";
+import useTodo from "@/composables/useTodo";
 
 export default {
   setup() {
-    const { getters, commit, dispatch } = useStore();
-    const currentTab = ref("all");
+    const { currentTab, pending, getTodosByTab, toggleTodo } = useTodo();
 
     return {
       currentTab,
-
-      pending: computed(() => getters["pendingTodos"]),
-      completed: computed(() => getters["completedTodos"]),
-      all: computed(() => getters["allTodos"]),
-      getTodosByTab: computed(() => getters["getTodosByTab"](currentTab.value)),
+      pending,
+      getTodosByTab,
+      toggleTodo,
     };
   },
 };
