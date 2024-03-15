@@ -12,6 +12,7 @@ const useTodo = () => {
     completed: computed(() => getters["completedTodos"]),
     all: computed(() => getters["allTodos"]),
     getTodosByTab: computed(() => getters["getTodosByTab"](currentTab.value)),
+    newTask: (text) => commit("newTask", text),
     toggleTodo: (id) => commit("toggleTodo", id),
   };
 };
