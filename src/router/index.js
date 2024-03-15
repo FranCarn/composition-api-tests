@@ -29,6 +29,12 @@ const routes = [
       import(/* webpackChunkName: "users" */ "../views/UsersView.vue"),
   },
   {
+    path: "/users-old",
+    name: "usersOld",
+    component: () =>
+      import(/* webpackChunkName: "users" */ "../views/UsersOld.vue"),
+  },
+  {
     path: "/search",
     name: "search",
     component: () =>
@@ -45,6 +51,12 @@ const routes = [
     name: "to-do",
     component: () =>
       import(/* webpackChunkName: "to-do" */ "../views/TodoVuex.vue"),
+  },
+  {
+    path: "/slots",
+    name: "slots",
+    component: () =>
+      import(/* webpackChunkName: "slots" */ "../views/CustomSlots.vue"),
   },
 ];
 
