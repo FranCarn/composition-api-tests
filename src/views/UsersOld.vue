@@ -1,16 +1,15 @@
 <template>
   <h2 v-if="isLoading">Loading...</h2>
-  <h2 v-else>Users</h2>
+  <h2 v-else>Users Old</h2>
   <h5 v-if="errorMsg">{{ errorMsg }}</h5>
 
   <div v-if="users.length">
-    <user-list :users="users" v-slot="{ user }">
-      <div class="avatarContainer">
-        <h5>{{ user.last_name }}, {{ user.first_name }}</h5>
-        <img :alt="user.first_name" :src="user.avatar" />
-      </div>
-      <span>{{ user.email }}</span>
-    </user-list>
+    <ul>
+      <li v-for="{ first_name, last_name, id, email } in users" :key="id">
+        <h4>{{ first_name }} {{ last_name }}</h4>
+        <h5>{{ email }}</h5>
+      </li>
+    </ul>
   </div>
   <button @click="prevPage">Back</button>
   <span>Page {{ currentPage }}</span>
@@ -19,11 +18,8 @@
 
 <script>
 import useUsers from "@/composables/useUsers";
-import UserList from "@/components/UserList";
+
 export default {
-  components: {
-    UserList,
-  },
   setup() {
     const {
       currentPage,
@@ -62,7 +58,7 @@ div {
   text-align: center;
 }
 ul {
-  width: 300px;
+  width: 200px;
   margin: 0;
   padding: 0;
 }
@@ -76,20 +72,5 @@ button {
   border-radius: 4px;
   cursor: pointer;
   padding: 5px 10px;
-}
-.avatarContainer {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-img {
-  border-radius: 100%;
-  width: 45px;
-  height: 45px;
-}
-span {
-  padding: 10px;
-  margin-bottom: 30px;
-  display: block;
 }
 </style>
