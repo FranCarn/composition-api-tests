@@ -31,10 +31,10 @@ export default createStore({
     ],
   },
   getters: {
-    allTodos: (state, getters, rootState) => {
+    allTodos: (state) => {
       return [...state.todos];
     },
-    completedTodos: (state, getters, rootState) => {
+    completedTodos: (state) => {
       return state.todos.filter((t) => t.completed);
     },
     pendingTodos: (state, getters, rootState) => {
